@@ -44,7 +44,7 @@ public class SimpleClient extends Correspondent {
 
     // java echo.SimpleClient port = 5555 host = localHost
     public static void main(String[] args) {
-        int port = 5555;
+        int port = 6666;
         String host = "localhost";
         if (1 <= args.length) {
             port = Integer.parseInt(args[0]);

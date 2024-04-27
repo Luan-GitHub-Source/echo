@@ -1,5 +1,6 @@
 package echo;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -24,7 +25,7 @@ public class Server {
 
 
     public void listen() {
-        System.out.println("Server listening at port : " +myPort);
+        System.out.println("Server listening at port : " + myPort);
         while(true) {
             // accept a connection
             try{
@@ -34,7 +35,8 @@ public class Server {
                 // start handler in its own thread
                 Thread thread = new Thread(handler);
                 thread.start();
-            } catch (IOException exception){
+            } catch (IOException | NoSuchMethodException | InvocationTargetException | InstantiationException |
+                     IllegalAccessException exception){
                 System.err.println(exception.getMessage());
                 System.exit(1);
             }
@@ -42,18 +44,19 @@ public class Server {
         } // while
     }
 
-    public RequestHandler makeHandler(Socket s) {
-        // handler = handlerType.getDeclaredConstructor().newInstance()
+    public RequestHandler makeHandler(Socket s) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        RequestHandler handler = (RequestHandler) handlerType.getDeclaredConstructor().newInstance();
         // set handler's socket to s
+        handler.setSocket(s);
         // return handler
-        return new RequestHandler(s);
+        return handler;
     }
 
 
-
+    //Echo Framework
     public static void main(String[] args) {
         int port = 5555;
-        String service = "echo.RequestHandler";
+        String service = "echo.MathHandler";
         if (1 <= args.length) {
             service = args[0];
         }

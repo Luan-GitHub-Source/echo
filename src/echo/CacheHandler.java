@@ -5,6 +5,7 @@ public class CacheHandler extends ProxyHandler {
     private SafeTable cache;
 
     public CacheHandler() {
+        System.out.println("cache table created");
         cache = new SafeTable();
     }
 
